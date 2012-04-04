@@ -9,7 +9,12 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    if signed_in?
+      flash[:error] = "We are sorry, you will need to log out before you can create a new account. Have a great day!"
+      redirect_to root_path
+    else
+      @user = User.new
+    end
   end
 
   def index
@@ -18,7 +23,10 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    if @user.save
+    if signed_in?
+      flash[:error] = "We are sorry, you cannot create a new account while already signed in. Have a great day!"
+      redirect_to root_path
+    elsif @user.save
       sign_in @user
       flash[:success] = "Welcome to the Sample App!"
       redirect_to @user

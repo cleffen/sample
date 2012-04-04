@@ -64,6 +64,17 @@ describe "AuthenticationPages" do
           before { visit users_path }
           it { should have_selector('title', text: 'Sign in')}
         end
+
+        describe "should not view profile page while not signed in" do
+          before { visit root_path }
+          it { should_not have_link('Profile', href: user_path(user))}
+        end
+
+        describe "should not see settings page while not signed in" do
+          before { visit root_path }
+          it { should_not have_link('Settings', href: edit_user_path(user))}
+        end
+
       end
     end
 
